@@ -1,8 +1,15 @@
+import os
+
 import streamlit as st
+from dotenv import load_dotenv
 
 from datetime import datetime
 
+from ai_advisor import advise, run_agent_chain
 from pawpal_system import Owner, Pet, Scheduler, Task
+
+# Load environment variables from .env if present (ignored when not found)
+load_dotenv()
 
 st.set_page_config(page_title="PawPal+", page_icon="🐾", layout="centered")
 
@@ -163,3 +170,66 @@ if st.button("Generate schedule"):
         )
     else:
         st.info("No incomplete tasks are scheduled for today.")
+
+st.divider()
+
+# ---------------------------------------------------------------------------
+# AI Advisor  (RAG + agentic schedule check)
+# ---------------------------------------------------------------------------
+st.subheader("🤖 AI Advisor")
+st.caption(
+    "Retrieves relevant pet care facts from the local knowledge base, "
+    "then asks an LLM to generate personalised advice for each pet. "
+    "Also runs an agentic check of today's schedule to flag gaps or conflicts."
+)
+
+if not owner.pets:
+    st.info("Add a pet to get AI-powered care advice.")
+else:
+    selected_advisor_pet = st.selectbox(
+        "Get advice for",
+        [pet.name for pet in owner.pets],
+        key="advisor_pet_select",
+    )
+
+    if st.button("Run AI Advisor"):
+        target_pet = owner.get_pet(selected_advisor_pet)
+        if target_pet is None:
+            st.error("Selected pet could not be found.")
+        else:
+            with st.spinner("Retrieving facts and generating advice…"):
+                result = run_agent_chain(owner, target_pet)
+
+            st.markdown("#### Care Advice")
+            confidence = result["confidence_score"]
+            if confidence >= 0.6:
+                st.success(f"Retrieval confidence: {confidence:.0%}")
+            elif confidence >= 0.3:
+                st.warning(f"Retrieval confidence: {confidence:.0%} — limited context matched")
+            else:
+                st.error(f"Retrieval confidence: {confidence:.0%} — few relevant facts found; advice may be generic")
+            st.write(result["advice"])
+
+            with st.expander("Agent chain — intermediate steps"):
+                for step in result.get("chain_steps", []):
+                    st.markdown(f"**{step['step']}**")
+                    st.caption(f"In: {step['input']}  →  Out: {step['output']}")
+                    if "data" in step:
+                        st.json(step["data"])
+
+            with st.expander("Retrieved knowledge base facts used as context"):
+                if result["retrieved_facts"]:
+                    for fact in result["retrieved_facts"]:
+                        source = fact.get("source", "kb")
+                        st.markdown(f"- `[{source}]` {fact['fact']}")
+                else:
+                    st.write("No relevant facts were retrieved.")
+
+            st.markdown("#### Schedule Check")
+            for obs in result["schedule_observations"]:
+                if obs.startswith("⚠") or "Conflict" in obs:
+                    st.warning(obs)
+                elif obs.startswith("✓"):
+                    st.success(obs)
+                else:
+                    st.info(obs)
