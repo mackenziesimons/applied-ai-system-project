@@ -1,6 +1,12 @@
 from datetime import datetime
 
 from pawpal_system import Owner, Pet, Scheduler, Task
+from ai_advisor import (
+    compute_confidence_score,
+    evaluate_schedule,
+    load_knowledge_base,
+    retrieve_facts,
+)
 
 
 def test_mark_complete_changes_status():
@@ -118,3 +124,136 @@ def test_detect_conflicts_returns_warning_for_same_time_tasks():
 
     assert len(warnings) == 1
     assert "Conflict detected" in warnings[0]
+
+
+# ---------------------------------------------------------------------------
+# AI Advisor tests
+# ---------------------------------------------------------------------------
+
+
+def test_load_knowledge_base_returns_nonempty_list():
+    kb = load_knowledge_base()
+    assert isinstance(kb, list)
+    assert len(kb) > 0
+    # Every entry must have 'fact' and 'tags' keys
+    for entry in kb:
+        assert "fact" in entry
+        assert "tags" in entry
+
+
+def test_retrieve_facts_returns_relevant_facts_for_dog():
+    kb = load_knowledge_base()
+    pet = Pet(name="Mochi", species="dog", age=3)
+    tasks = [Task(description="Morning walk", time=datetime(2026, 3, 29, 8, 0))]
+
+    facts = retrieve_facts(pet, tasks, kb, top_k=3)
+
+    assert len(facts) <= 3
+    # All returned facts should have at least one dog- or walk-related tag
+    for fact in facts:
+        tags = {t.lower() for t in fact["tags"]}
+        assert tags & {"dog", "walk", "exercise"}, f"Unexpected fact tags: {tags}"
+
+
+def test_retrieve_facts_returns_empty_for_empty_knowledge_base():
+    pet = Pet(name="Mochi", species="dog", age=3)
+    tasks = [Task(description="Feed breakfast", time=datetime(2026, 3, 29, 9, 0))]
+
+    facts = retrieve_facts(pet, tasks, knowledge_base=[], top_k=5)
+
+    assert facts == []
+
+
+def test_confidence_score_is_between_zero_and_one():
+    kb = load_knowledge_base()
+    pet = Pet(name="Mochi", species="dog", age=3)
+    tasks = [Task(description="Morning walk", time=datetime(2026, 3, 29, 8, 0))]
+    facts = retrieve_facts(pet, tasks, kb)
+
+    score = compute_confidence_score(pet, tasks, facts)
+
+    assert 0.0 <= score <= 1.0
+
+
+def test_confidence_score_is_zero_when_no_facts_retrieved():
+    pet = Pet(name="Mochi", species="dog", age=3)
+    tasks = [Task(description="Morning walk", time=datetime(2026, 3, 29, 8, 0))]
+
+    score = compute_confidence_score(pet, tasks, retrieved_facts=[])
+
+    assert score == 0.0
+
+
+def test_confidence_score_higher_with_matching_tasks():
+    kb = load_knowledge_base()
+    pet = Pet(name="Mochi", species="dog", age=3)
+
+    tasks_relevant = [
+        Task(description="Morning walk", time=datetime(2026, 3, 29, 8, 0)),
+        Task(description="Feed breakfast", time=datetime(2026, 3, 29, 9, 0)),
+    ]
+    tasks_irrelevant = [
+        Task(description="Arbitrary xyz task", time=datetime(2026, 3, 29, 10, 0)),
+    ]
+
+    facts_relevant = retrieve_facts(pet, tasks_relevant, kb)
+    facts_irrelevant = retrieve_facts(pet, tasks_irrelevant, kb)
+
+    score_relevant = compute_confidence_score(pet, tasks_relevant, facts_relevant)
+    score_irrelevant = compute_confidence_score(pet, tasks_irrelevant, facts_irrelevant)
+
+    assert score_relevant >= score_irrelevant
+
+
+def test_evaluate_schedule_flags_missing_feeding_for_dog():
+    owner = Owner(name="Jordan")
+    dog = Pet(name="Mochi", species="dog", age=3)
+    owner.add_pet(dog)
+    # Only a walk — no feeding task
+    dog.add_task(
+        Task(
+            description="Morning walk",
+            time=datetime(2026, 4, 30, 8, 0),
+            frequency="daily",
+        )
+    )
+
+    observations = evaluate_schedule(owner, current_time=datetime(2026, 4, 30, 7, 0))
+
+    feeding_warnings = [o for o in observations if "feeding" in o.lower()]
+    assert len(feeding_warnings) >= 1
+
+
+def test_evaluate_schedule_flags_missing_exercise_for_dog():
+    owner = Owner(name="Jordan")
+    dog = Pet(name="Mochi", species="dog", age=3)
+    owner.add_pet(dog)
+    # Only a feeding task — no walk/exercise
+    dog.add_task(
+        Task(
+            description="Feed breakfast",
+            time=datetime(2026, 4, 30, 9, 0),
+            frequency="daily",
+        )
+    )
+
+    observations = evaluate_schedule(owner, current_time=datetime(2026, 4, 30, 7, 0))
+
+    exercise_warnings = [o for o in observations if "walk" in o.lower() or "exercise" in o.lower()]
+    assert len(exercise_warnings) >= 1
+
+
+def test_evaluate_schedule_passes_when_dog_has_feeding_and_walk():
+    owner = Owner(name="Jordan")
+    dog = Pet(name="Mochi", species="dog", age=3)
+    owner.add_pet(dog)
+    dog.add_task(
+        Task(description="Feed breakfast", time=datetime(2026, 4, 30, 9, 0), frequency="daily")
+    )
+    dog.add_task(
+        Task(description="Morning walk", time=datetime(2026, 4, 30, 8, 0), frequency="daily")
+    )
+
+    observations = evaluate_schedule(owner, current_time=datetime(2026, 4, 30, 7, 0))
+
+    assert any("complete" in o.lower() or o.startswith("\u2713") for o in observations)
