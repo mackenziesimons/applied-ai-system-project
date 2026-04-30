@@ -1,0 +1,38 @@
+[
+  {
+    "id": "owner_note_medication_with_food",
+    "source": "owner_notes",
+    "tags": ["dog", "cat", "medication", "pill", "dose", "food"],
+    "fact": "Owner note: always give medication with a small amount of wet food or a treat to mask the taste and reduce the chance of the pet spitting it out."
+  },
+  {
+    "id": "owner_note_morning_routine",
+    "source": "owner_notes",
+    "tags": ["dog", "walk", "morning", "routine", "schedule"],
+    "fact": "Owner note: the morning walk works best before breakfast — it helps the dog eliminate fully and avoids an upset stomach from exercising on a full meal."
+  },
+  {
+    "id": "owner_note_cat_wet_food",
+    "source": "owner_notes",
+    "tags": ["cat", "feeding", "food", "wet food", "hydration"],
+    "fact": "Owner note: mixing a tablespoon of warm water into wet food increases moisture intake, which supports kidney health in cats prone to urinary issues."
+  },
+  {
+    "id": "owner_note_litter_reward",
+    "source": "owner_notes",
+    "tags": ["cat", "litter", "cleanup", "scoop", "litter box"],
+    "fact": "Owner note: scooping the litter box immediately after the cat uses it — and giving a small treat nearby — reinforces litter box use and prevents avoidance behaviour."
+  },
+  {
+    "id": "owner_note_play_wind_down",
+    "source": "owner_notes",
+    "tags": ["cat", "dog", "play", "enrichment", "activity", "sleep", "evening"],
+    "fact": "Owner note: ending play sessions with a 'catch' or 'find the treat' activity mimics the hunt-catch-eat cycle, which helps pets settle down calmly rather than staying over-stimulated."
+  },
+  {
+    "id": "owner_note_grooming_calm",
+    "source": "owner_notes",
+    "tags": ["dog", "cat", "grooming", "brush", "coat", "calm", "treat"],
+    "fact": "Owner note: pairing brushing with a high-value treat from the first session teaches the pet that grooming predicts something good, making future sessions faster and stress-free."
+  }
+]

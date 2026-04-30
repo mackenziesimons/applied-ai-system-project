@@ -1,0 +1,112 @@
+[
+  {
+    "id": "dog_feeding_adult",
+    "tags": ["dog", "feed", "feeding", "breakfast", "dinner", "meal", "food"],
+    "fact": "Adult dogs generally do best with two meals per day, roughly 8-12 hours apart, to maintain stable blood sugar and healthy digestion."
+  },
+  {
+    "id": "dog_feeding_puppy",
+    "tags": ["dog", "puppy", "feed", "feeding", "meal", "food"],
+    "fact": "Puppies under six months need three to four small meals per day because their stomachs are small and blood sugar drops quickly between feedings."
+  },
+  {
+    "id": "dog_walk_frequency",
+    "tags": ["dog", "walk", "exercise", "outdoor", "activity"],
+    "fact": "Most dogs need at least 30 minutes of moderate exercise daily; high-energy breeds (Huskies, Border Collies, Labs) often need 1-2 hours."
+  },
+  {
+    "id": "dog_walk_timing",
+    "tags": ["dog", "walk", "morning", "schedule", "routine"],
+    "fact": "A morning walk within 30 minutes of waking helps dogs eliminate, reduces indoor accidents, and establishes a predictable daily routine."
+  },
+  {
+    "id": "dog_medication_timing",
+    "tags": ["dog", "medication", "medicine", "pill", "dose", "treatment"],
+    "fact": "Give oral medications to dogs at the same time each day to maintain consistent drug levels; many meds absorb better when given with food."
+  },
+  {
+    "id": "dog_grooming_brushing",
+    "tags": ["dog", "grooming", "brush", "coat", "fur", "shed"],
+    "fact": "Short-coated dogs benefit from weekly brushing to distribute skin oils; long-coated and double-coated breeds may need daily brushing to prevent matting."
+  },
+  {
+    "id": "dog_hydration",
+    "tags": ["dog", "water", "hydration", "drink"],
+    "fact": "Dogs need approximately 1 ounce of water per pound of body weight per day; always ensure fresh water is available, especially after exercise."
+  },
+  {
+    "id": "dog_dental",
+    "tags": ["dog", "dental", "teeth", "brush", "oral"],
+    "fact": "Brushing a dog's teeth 2-3 times per week significantly reduces plaque buildup and the risk of periodontal disease, which affects 80% of dogs by age 3."
+  },
+  {
+    "id": "cat_feeding_adult",
+    "tags": ["cat", "feed", "feeding", "breakfast", "dinner", "meal", "food"],
+    "fact": "Adult cats do well with two measured meals per day. Free-feeding dry food can lead to obesity, especially in indoor cats with low activity levels."
+  },
+  {
+    "id": "cat_feeding_senior",
+    "tags": ["cat", "senior", "old", "feed", "feeding", "meal", "food"],
+    "fact": "Senior cats (7+ years) may benefit from smaller, more frequent meals and wet food with higher moisture content to support kidney health."
+  },
+  {
+    "id": "cat_play_enrichment",
+    "tags": ["cat", "play", "enrichment", "activity", "stimulation", "toy"],
+    "fact": "Cats need at least 10-15 minutes of interactive play twice daily to satisfy hunting instincts, reduce stress, and prevent obesity-related conditions."
+  },
+  {
+    "id": "cat_litter_frequency",
+    "tags": ["cat", "litter", "cleanup", "scoop", "litter box"],
+    "fact": "Litter boxes should be scooped at least once daily. Cats are fastidious and may start eliminating outside the box if the litter is too dirty."
+  },
+  {
+    "id": "cat_litter_ratio",
+    "tags": ["cat", "litter", "box", "count"],
+    "fact": "The general rule is one litter box per cat plus one extra. For multi-cat households, place boxes in different locations to reduce territorial stress."
+  },
+  {
+    "id": "cat_grooming_coat",
+    "tags": ["cat", "grooming", "brush", "coat", "fur"],
+    "fact": "Long-haired cats need daily brushing to prevent painful mats; short-haired cats benefit from weekly brushing to reduce shedding and hairballs."
+  },
+  {
+    "id": "cat_medication",
+    "tags": ["cat", "medication", "medicine", "pill", "dose", "treatment"],
+    "fact": "Cats are notoriously difficult to pill; wrapping in a towel ('burrito method') and following the pill with a water syringe reduces choking risk."
+  },
+  {
+    "id": "cat_hydration",
+    "tags": ["cat", "water", "hydration", "drink", "fountain"],
+    "fact": "Cats have a low thirst drive and get much of their water from prey in the wild. A cat water fountain or wet food helps prevent dehydration and urinary issues."
+  },
+  {
+    "id": "general_routine_importance",
+    "tags": ["dog", "cat", "routine", "schedule", "consistency", "stress"],
+    "fact": "Pets thrive on predictable routines. Consistent feeding, play, and sleep schedules reduce anxiety and make behavior problems less likely."
+  },
+  {
+    "id": "general_vet_checkup",
+    "tags": ["dog", "cat", "vet", "checkup", "health", "annual", "vaccine"],
+    "fact": "Annual wellness exams are recommended for pets under 7 years; twice-yearly exams are advised for senior pets to catch age-related conditions early."
+  },
+  {
+    "id": "general_stress_signs",
+    "tags": ["dog", "cat", "stress", "anxiety", "behavior", "warning"],
+    "fact": "Common signs of stress in pets include changes in appetite, hiding, excessive grooming, aggression, or elimination outside the designated area."
+  },
+  {
+    "id": "dog_senior_exercise",
+    "tags": ["dog", "senior", "old", "walk", "exercise", "joint", "arthritis"],
+    "fact": "Senior dogs (7+ years for most breeds) benefit from shorter, more frequent walks rather than one long session to protect aging joints and prevent fatigue."
+  },
+  {
+    "id": "cat_indoor_enrichment",
+    "tags": ["cat", "indoor", "enrichment", "window", "perch", "boredom"],
+    "fact": "Indoor cats need vertical space (cat trees, shelves) and window access to birds or squirrels to stimulate natural hunting behavior and prevent boredom."
+  },
+  {
+    "id": "dog_heat_safety",
+    "tags": ["dog", "walk", "exercise", "heat", "summer", "safety"],
+    "fact": "On hot days, walk dogs in the early morning or evening when pavement is cool. Pavement above 125°F (52°C) can burn paw pads within 60 seconds."
+  }
+]
