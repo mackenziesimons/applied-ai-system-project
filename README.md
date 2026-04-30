@@ -16,6 +16,14 @@ PawPal+ originated as a class project in AI 110 (Modules 1-3) focused on designi
 
 ---
 
+## Loom Walkthrough (Required)
+
+End-to-end system demo video:
+
+https://www.loom.com/share/e94db7e65bd1486fbe5e6ec8ac01fb3b
+
+---
+
 ## AI Features
 
 ### Retrieval-Augmented Generation (RAG)
