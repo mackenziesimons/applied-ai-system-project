@@ -14,38 +14,7 @@ load_dotenv()
 st.set_page_config(page_title="PawPal+", page_icon="🐾", layout="centered")
 
 st.title("🐾 PawPal+")
-
-st.markdown(
-    """
-Welcome to the PawPal+ starter app.
-
-This file is intentionally thin. It gives you a working Streamlit app so you can start quickly,
-but **it does not implement the project logic**. Your job is to design the system and build it.
-
-Use this app as your interactive demo once your backend classes/functions exist.
-"""
-)
-
-with st.expander("Scenario", expanded=True):
-    st.markdown(
-        """
-**PawPal+** is a pet care planning assistant. It helps a pet owner plan care tasks
-for their pet(s) based on constraints like time, priority, and preferences.
-
-You will design and implement the scheduling logic and connect it to this Streamlit UI.
-"""
-    )
-
-with st.expander("What you need to build", expanded=True):
-    st.markdown(
-        """
-At minimum, your system should:
-- Represent pet care tasks (what needs to happen, how long it takes, priority)
-- Represent the pet and the owner (basic info and preferences)
-- Build a plan/schedule for a day that chooses and orders tasks based on constraints
-- Explain the plan (why each task was chosen and when it happens)
-"""
-    )
+st.caption("A pet care scheduling assistant with a RAG-powered AI Advisor.")
 
 st.divider()
 
@@ -57,6 +26,43 @@ if "scheduler" not in st.session_state:
 
 owner: Owner = st.session_state.owner
 scheduler: Scheduler = st.session_state.scheduler
+
+# ---------------------------------------------------------------------------
+# Demo loader
+# ---------------------------------------------------------------------------
+def _load_demo_data(owner: Owner) -> None:
+    """Populate owner with three demo pets and tasks for the video walkthrough."""
+    today = datetime.now().replace(second=0, microsecond=0)
+
+    # Clear existing pets
+    owner.pets.clear()
+
+    # --- Demo 1: dog with full schedule (clean case) ---
+    mochi = Pet(name="Mochi", species="dog", age=3, preferences={"favorite_activity": "Walks"})
+    mochi.add_task(Task(description="Morning walk",   time=today.replace(hour=8,  minute=0), frequency="daily"))
+    mochi.add_task(Task(description="Feed breakfast", time=today.replace(hour=9,  minute=0), frequency="daily"))
+    mochi.add_task(Task(description="Give medication",time=today.replace(hour=9,  minute=30), frequency="daily"))
+    owner.add_pet(mochi)
+
+    # --- Demo 2: dog with only a walk (feeding gap case) ---
+    rex = Pet(name="Rex", species="dog", age=5, preferences={"favorite_activity": "Fetch"})
+    rex.add_task(Task(description="Morning walk",     time=today.replace(hour=8,  minute=0), frequency="daily"))
+    owner.add_pet(rex)
+
+    # --- Demo 3: cat (conflict with Rex at 8 AM) ---
+    luna = Pet(name="Luna", species="cat", age=5, preferences={"favorite_activity": "Playing"})
+    luna.add_task(Task(description="Feed breakfast",  time=today.replace(hour=8,  minute=0), frequency="daily"))
+    luna.add_task(Task(description="Play session",    time=today.replace(hour=18, minute=0), frequency="daily"))
+    owner.add_pet(luna)
+
+with st.expander("▶ Quick start — load demo data", expanded=not bool(owner.pets)):
+    st.caption("Loads 3 pre-built pets (Mochi the dog, Rex the dog, Luna the cat) with tasks so you can jump straight to the AI Advisor demo.")
+    if st.button("Load demo data"):
+        _load_demo_data(owner)
+        st.success("Demo data loaded! Scroll down to **AI Advisor** and click Run.")
+        st.rerun()
+
+st.divider()
 
 st.subheader("Owner and Pets")
 owner_name = st.text_input("Owner name", value=owner.name)
